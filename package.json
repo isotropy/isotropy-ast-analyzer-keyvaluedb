@@ -1,0 +1,33 @@
+{
+  "name": "isotropy-ast-analyzer-keyvaluedb",
+  "version": "0.0.1",
+  "author": "Arivanandan<uarivanandan@gmail.com>",
+  "contributors": [
+  "Jeswin Kumar<jeswinpk@agilehead.com>",
+  "Arivanandan<uarivanandan@gmail.com>"
+  ],
+  "scripts": {
+    "test": "mocha dist/test/test.js",
+    "debug": "mocha dist/test/test.js --debug-brk"
+  },
+  "main": "dist/index.js",
+  "dependencies": {
+    "ast-crumbs": "0.0.2",
+    "chimpanzee": "0.0.50",
+    "lazily": "^0.0.17",
+    "ramda": "^0.23.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.22.1",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-es2017": "^6.22.0",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-modern-browsers": "^7.0.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "mocha": "*",
+    "should": "*",
+    "source-map-support": "^0.4.8"
+  },
+  "license": "MIT"
+}
