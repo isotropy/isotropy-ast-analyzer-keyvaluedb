@@ -16,8 +16,8 @@ export function createModification(operation, props, source) {
 }
 
 export function get(command, args) {
-  const { predicate } = args;
-  return createQuery("get", { predicate }, command);
+  const { match } = args;
+  return createQuery("get", { match }, command);
 }
 
 export function count(command) {

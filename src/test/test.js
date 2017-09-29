@@ -72,8 +72,8 @@ describe("isotropy-ast-analyzer-db", () => {
     ["collection", "collection"],
     // ["count", "count"],
     // ["del", "del"],
-    ["put", "put"]
-    // ["get", "get"],
+    ["put", "put"],
+    ["get", "get"]
     // ["update", "update"]
   ];
 

@@ -8,7 +8,6 @@ import { put } from "../db-statements";
 
 const arrayDetector = putObject => {
   let arrayDetected = false;
-  let currentObject = "";
 
   const objectRecursor = checkingObject => {
     for (let prop of Object.values(checkingObject)) {

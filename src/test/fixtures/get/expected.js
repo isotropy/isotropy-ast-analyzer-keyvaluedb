@@ -1,40 +1,52 @@
-//todo.assignee === who && (todo.priority > 2 || todo.immediate) && todo.new
 module.exports = {
   type: "query",
-  method: "filter",
-  predicate: {
-    operator: "$and",
-    left: {
-      operator: "$and",
+  operation: "get",
+  match: {
+    type: "ArrowFunctionExpression",
+    id: {},
+    generator: false,
+    expression: true,
+    async: false,
+    params: [
+      {
+        type: "Identifier",
+        name: "todo"
+      }
+    ],
+    body: {
+      type: "BinaryExpression",
       left: {
-        operator: "$eq",
-        field: "assignee",
-        valueNode: {
-          type: "Identifier",
-          name: "who"
+        type: "MemberExpression",
+        object: {
+          type: "CallExpression",
+          callee: {
+            type: "MemberExpression",
+            object: {
+              type: "Identifier",
+              name: "Object"
+            },
+            property: {
+              type: "Identifier",
+              name: "keys"
+            }
+          },
+          arguments: [
+            {
+              type: "Identifier",
+              name: "todo"
+            }
+          ]
+        },
+        property: {
+          type: "NumericLiteral",
+          value: 0
         }
       },
+      operator: "===",
       right: {
-        operator: "$or",
-        left: {
-          operator: "$gt",
-          field: "priority",
-          valueNode: {
-            type: "NumericLiteral",
-            value: 2
-          }
-        },
-        right: {
-          operator: "$eq",
-          field: "immediate",
-          valueNode: { type: "BooleanLiteral", value: true }
-        }
+        type: "StringLiteral",
+        value: "Get eggs"
       }
-    },
-    right: {
-      operator: "$eq",
-      field: "new",
-      valueNode: { type: "BooleanLiteral", value: true }
     }
   },
   source: {
