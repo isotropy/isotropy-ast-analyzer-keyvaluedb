@@ -45,7 +45,7 @@ module.exports = {
       operator: "===",
       right: {
         type: "StringLiteral",
-        value: "Get eggs"
+        value: "Get_Eggs"
       }
     }
   },

@@ -9,8 +9,9 @@ export default function(analysisState) {
         myDb.todos = myDb.todos.concat({ title, assignee });
     */
     analyzeAssignmentExpression(path, state) {
-      return makeAnalyzer([schemas.put
-        // , schemas.update, schemas.del
+      return makeAnalyzer([schemas.put, 
+        // , schemas.update,
+        schemas.del
       ], path, state, analysisState);
     }
   };

@@ -35,6 +35,6 @@ export function update(command, args) {
 }
 
 export function del(command, args) {
-  const { predicate } = args;
-  return createModification("del", { predicate }, command);
+  const { key, operator, value } = args;
+  return createModification("del", { key, value, operator }, command);
 }

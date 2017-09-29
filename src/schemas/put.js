@@ -47,14 +47,13 @@ export default function(state, analysisState) {
       build: obj => context => result =>
         result instanceof Match
           ? (() => {
-              arrayDetector(clean(result.value.arguments[0]));
               return R.equals(result.value.left, result.value.object)
                 ? result.value.arguments[0].type === "ObjectExpression" &&
                     !arrayDetector(result.value.arguments[0])
                   ? put(result.value.left, {
                       itemsNode: result.value.arguments[0]
                     })
-                  : new Skip(`You can only put objects inside a redis store.`)
+                  : new Skip(`You can only put objects inside an Isotropy-Redis store.`)
                 : new Skip(
                     `The result of the concat() must be assigned to the same collection.`
                   );
