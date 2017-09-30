@@ -38,13 +38,32 @@ export default function(state, analysisState) {
                 left: {
                   type: "MemberExpression",
                   object: {
-                    type: "Identifier",
-                    name: capture("dbRecordIdentifier2")
+                    type: "CallExpression",
+                    callee: {
+                      type: "MemberExpression",
+                      object: {
+                        type: "Identifier",
+                        name: "Object"
+                      },
+                      property: {
+                        type: "Identifier",
+                        name: "keys"
+                      }
+                    },
+                    arguments: [
+                      {
+                        type: "Identifier",
+                        name: capture("dbRecordIdentifier2")
+                      }
+                    ]
                   },
-                  property: capture()
+                  property: {
+                    type: "NumericLiteral",
+                    value: 0
+                  }
                 },
-                operator: capture(),
-                right: capture()
+                operator: "===",
+                right: capture("key")
               }
             }
           }
@@ -58,12 +77,10 @@ export default function(state, analysisState) {
               return R.equals(result.value.left, result.value.object)
                 ? R.equals(
                     result.value.arguments[0].params[0].dbRecordIdentifier1,
-                    result.value.arguments[0].dbRecordIdentifier2
+                    result.value.arguments[0].arguments[0].dbRecordIdentifier2
                   )
                   ? del(result.value.left, {
-                      key: result.value.arguments[0].property,
-                      operator: result.value.arguments[0].operator,
-                      value: result.value.arguments[0].right
+                      keyNode: result.value.arguments[0].key
                     })
                   : new Skip(`Incorrect access variable.`)
                 : new Skip(

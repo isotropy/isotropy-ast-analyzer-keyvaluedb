@@ -16,8 +16,8 @@ export function createModification(operation, props, source) {
 }
 
 export function get(command, args) {
-  const { match } = args;
-  return createQuery("get", { match }, command);
+  const { keyNode } = args;
+  return createQuery("get", { keyNode }, command);
 }
 
 export function count(command) {
@@ -35,6 +35,6 @@ export function update(command, args) {
 }
 
 export function del(command, args) {
-  const { key, operator, value } = args;
-  return createModification("del", { key, value, operator }, command);
+  const { keyNode } = args;
+  return createModification("del", { keyNode }, command);
 }

@@ -34,10 +34,7 @@ const binaryExp = {
     }
   },
   operator: "===",
-  right: {
-    type: "StringLiteral",
-    value: capture("key")
-  }
+  right: capture("key")
 };
 
 export default function(state, analysisState) {
@@ -72,7 +69,7 @@ export default function(state, analysisState) {
               const data = result.value.arguments[0];
               return data.params[0].dataAccessor1 ===
                 data.arguments[0].dataAccessor2
-                ? get(result.value.object, { match: data.key })
+                ? get(result.value.object, { keyNode: data.key })
                 : new Skip(`The data access variables do not match`);
             })()
           : new Skip(`Not get`)

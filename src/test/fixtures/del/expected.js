@@ -1,15 +1,10 @@
 module.exports = {
   type: "modification",
   operation: "del",
-  key: {
-    type: "Identifier",
-    name: "task"
-  },
-  value: {
+  keyNode: {
     type: "StringLiteral",
     value: "Get_Eggs"
   },
-  operator: "===",
   source: {
     type: "query",
     module: "todosDbModule",

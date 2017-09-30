@@ -1,7 +1,10 @@
 module.exports = {
   type: "query",
   operation: "get",
-  match: "Get_Eggs",
+  keyNode: {
+    type: "StringLiteral",
+    value: "Get_Eggs"
+  },
   source: {
     type: "query",
     module: "todosDbModule",
