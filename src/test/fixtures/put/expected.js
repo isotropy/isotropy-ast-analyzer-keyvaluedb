@@ -32,7 +32,7 @@ module.exports = {
   },
   source: {
     type: "query",
-    module: "todosDbModule",
+    module: "redis://127.0.0.1:6379",
     identifier: "myDb",
     collection: "todos"
   }

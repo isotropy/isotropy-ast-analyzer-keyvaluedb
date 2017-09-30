@@ -39,7 +39,12 @@ function clean(obj) {
 describe("isotropy-ast-analyzer-db", () => {
   function run([description, dir, opts]) {
     it(`${description}`, () => {
-      const fixturePath = path.resolve(__dirname, "fixtures", dir, `fixture.js`);
+      const fixturePath = path.resolve(
+        __dirname,
+        "fixtures",
+        dir,
+        `fixture.js`
+      );
       const outputPath = path.resolve(__dirname, "fixtures", dir, `output.js`);
       const expected = require(`./fixtures/${dir}/expected`);
       const pluginInfo = makePlugin(opts);
@@ -49,9 +54,19 @@ describe("isotropy-ast-analyzer-db", () => {
           [
             pluginInfo.plugin,
             {
-              databaseModules: {
-                todosDbModule: "./dist/test/fixtures/my-db"
-              }
+              projects: [
+                {
+                  dir: "dist/test",
+                  modules: [
+                    {
+                      source: "fixtures/my-db",
+                      locations: [
+                        { name: "todos", connStr: "redis://127.0.0.1:6379" }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "transform-object-rest-spread"
@@ -73,7 +88,7 @@ describe("isotropy-ast-analyzer-db", () => {
     // ["count", "count"],
     ["get", "get"],
     ["put", "put"],
-    ["del", "del"],
+    ["del", "del"]
     // ["update", "update"]
   ];
 
