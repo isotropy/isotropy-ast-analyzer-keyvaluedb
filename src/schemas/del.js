@@ -5,6 +5,27 @@ import composite from "../chimpanzee-utils/composite";
 import R from "ramda";
 import { del } from "../db-statements";
 
+const unaryExp = {
+  type: "UnaryExpression",
+  operator: "!",
+  argument: {
+    type: "BinaryExpression",
+    left: {
+      type: "MemberExpression",
+      object: {
+        type: "Identifier",
+        name: capture("dataAccessor2")
+      },
+      property: {
+        type: "Identifier",
+        name: "key"
+      }
+    },
+    operator: "===",
+    right: capture("key")
+  }
+};
+
 export default function(state, analysisState) {
   return composite(
     {
@@ -27,45 +48,10 @@ export default function(state, analysisState) {
             params: [
               {
                 type: "Identifier",
-                name: capture("dbRecordIdentifier1")
+                name: capture("dataAccessor1")
               }
             ],
-            body: {
-              type: "UnaryExpression",
-              operator: "!",
-              argument: {
-                type: "BinaryExpression",
-                left: {
-                  type: "MemberExpression",
-                  object: {
-                    type: "CallExpression",
-                    callee: {
-                      type: "MemberExpression",
-                      object: {
-                        type: "Identifier",
-                        name: "Object"
-                      },
-                      property: {
-                        type: "Identifier",
-                        name: "keys"
-                      }
-                    },
-                    arguments: [
-                      {
-                        type: "Identifier",
-                        name: capture("dbRecordIdentifier2")
-                      }
-                    ]
-                  },
-                  property: {
-                    type: "NumericLiteral",
-                    value: 0
-                  }
-                },
-                operator: "===",
-                right: capture("key")
-              }
-            }
+            body: unaryExp
           }
         ]
       }
@@ -74,11 +60,9 @@ export default function(state, analysisState) {
       build: obj => context => result =>
         result instanceof Match
           ? (() => {
+              const data = result.value.arguments[0];
               return R.equals(result.value.left, result.value.object)
-                ? R.equals(
-                    result.value.arguments[0].params[0].dbRecordIdentifier1,
-                    result.value.arguments[0].arguments[0].dbRecordIdentifier2
-                  )
+                ? R.equals(data.params[0].dataAccessor1, data.dataAccessor2)
                   ? del(result.value.left, {
                       keyNode: result.value.arguments[0].key
                     })

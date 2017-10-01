@@ -9,28 +9,12 @@ const binaryExp = {
   left: {
     type: "MemberExpression",
     object: {
-      type: "CallExpression",
-      callee: {
-        type: "MemberExpression",
-        object: {
-          type: "Identifier",
-          name: "Object"
-        },
-        property: {
-          type: "Identifier",
-          name: "keys"
-        }
-      },
-      arguments: [
-        {
-          type: "Identifier",
-          name: capture("dataAccessor2")
-        }
-      ]
+      type: "Identifier",
+      name: capture("dataAccessor2")
     },
     property: {
-      type: "NumericLiteral",
-      value: 0
+      type: "Identifier",
+      name: "key"
     }
   },
   operator: "===",
@@ -67,8 +51,7 @@ export default function(state, analysisState) {
         result instanceof Match
           ? (() => {
               const data = result.value.arguments[0];
-              return data.params[0].dataAccessor1 ===
-                data.arguments[0].dataAccessor2
+              return data.params[0].dataAccessor1 === data.dataAccessor2
                 ? get(result.value.object, { keyNode: data.key })
                 : new Skip(`The data access variables do not match`);
             })()

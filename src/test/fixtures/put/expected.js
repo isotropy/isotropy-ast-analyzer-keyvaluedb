@@ -9,11 +9,11 @@ module.exports = {
         method: false,
         key: {
           type: "Identifier",
-          name: "title"
+          name: "key"
         },
         value: {
-          type: "Identifier",
-          name: "title"
+          type: "StringLiteral",
+          value: "Task"
         }
       },
       {
@@ -21,11 +21,11 @@ module.exports = {
         method: false,
         key: {
           type: "Identifier",
-          name: "assignee"
+          name: "value"
         },
         value: {
-          type: "Identifier",
-          name: "assignee"
+          type: "StringLiteral",
+          value: "Get Eggs"
         }
       }
     ]
@@ -36,4 +36,4 @@ module.exports = {
     identifier: "myDb",
     collection: "todos"
   }
-}
+};
