@@ -25,8 +25,8 @@ export function count(command) {
 }
 
 export function put(command, args) {
-  const { itemsNode } = args;
-  return createModification("put", { itemsNode }, command);
+  const { keyNode, valueNode } = args;
+  return createModification("put", { keyNode, valueNode }, command);
 }
 
 export function update(command, args) {

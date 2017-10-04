@@ -1,34 +1,13 @@
 module.exports = {
   type: "modification",
   operation: "put",
-  itemsNode: {
-    type: "ObjectExpression",
-    properties: [
-      {
-        type: "ObjectProperty",
-        method: false,
-        key: {
-          type: "Identifier",
-          name: "key"
-        },
-        value: {
-          type: "StringLiteral",
-          value: "Task"
-        }
-      },
-      {
-        type: "ObjectProperty",
-        method: false,
-        key: {
-          type: "Identifier",
-          name: "value"
-        },
-        value: {
-          type: "StringLiteral",
-          value: "Get Eggs"
-        }
-      }
-    ]
+  keyNode: {
+    type: "StringLiteral",
+    value: "Task"
+  },
+  valueNode: {
+    type: "StringLiteral",
+    value: "Get Eggs"
   },
   source: {
     type: "query",

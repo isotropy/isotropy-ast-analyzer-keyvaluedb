@@ -6,23 +6,23 @@ import composite from "../chimpanzee-utils/composite";
 import R from "ramda";
 import { put } from "../db-statements";
 
-const arrayDetector = putObject => {
-  let arrayDetected = false;
-
-  const objectRecursor = checkingObject => {
-    for (let prop of Object.values(checkingObject)) {
-      if (prop === "ArrayExpression") {
-        arrayDetected = true;
-        break;
-      }
-
-      if (typeof prop === "object") objectRecursor(prop);
-    }
-  };
-
-  objectRecursor(putObject);
-  return arrayDetected;
-};
+// const arrayDetector = putObject => {
+//   let arrayDetected = false;
+//
+//   const objectRecursor = checkingObject => {
+//     for (let prop of Object.values(checkingObject)) {
+//       if (prop === "ArrayExpression") {
+//         arrayDetected = true;
+//         break;
+//       }
+//
+//       if (typeof prop === "object") objectRecursor(prop);
+//     }
+//   };
+//
+//   objectRecursor(putObject);
+//   return arrayDetected;
+// };
 
 export default function(state, analysisState) {
   return composite(
@@ -40,7 +40,29 @@ export default function(state, analysisState) {
             name: "concat"
           }
         },
-        arguments: capture()
+        arguments: [
+          {
+            type: capture(),
+            properties: [
+              {
+                type: "ObjectProperty",
+                key: {
+                  type: "Identifier",
+                  name: "key"
+                },
+                value: capture("key")
+              },
+              {
+                type: "ObjectProperty",
+                key: {
+                  type: "Identifier",
+                  name: "value"
+                },
+                value: capture("value")
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -48,12 +70,14 @@ export default function(state, analysisState) {
         result instanceof Match
           ? (() => {
               return R.equals(result.value.left, result.value.object)
-                ? result.value.arguments[0].type === "ObjectExpression" &&
-                    !arrayDetector(result.value.arguments[0])
+                ? result.value.arguments[0].type === "ObjectExpression"
                   ? put(result.value.left, {
-                      itemsNode: result.value.arguments[0]
+                      keyNode: result.value.arguments[0].properties[0].key,
+                      valueNode: result.value.arguments[0].properties[1].value
                     })
-                  : new Skip(`You can only put objects inside an Isotropy-Redis store.`)
+                  : new Skip(
+                      `You can only put objects inside an Isotropy-Redis store.`
+                    )
                 : new Skip(
                     `The result of the concat() must be assigned to the same collection.`
                   );
