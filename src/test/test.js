@@ -4,37 +4,9 @@ import fs from "fs";
 import path from "path";
 import makePlugin from "./plugin";
 import sourceMapSupport from "source-map-support";
+import clean from "../chimpanzee-utils/node-cleaner";
 
 sourceMapSupport.install();
-
-function clean(obj) {
-  if (typeof obj !== "object") {
-    return obj;
-  } else {
-    if (Array.isArray(obj)) {
-      return obj.map(o => clean(o));
-    } else {
-      const newObj = {};
-      for (const key in obj) {
-        if (
-          ![
-            "start",
-            "end",
-            "loc",
-            "computed",
-            "shorthand",
-            "extra",
-            "__clone",
-            "path"
-          ].includes(key)
-        ) {
-          newObj[key] = clean(obj[key]);
-        }
-      }
-      return newObj;
-    }
-  }
-}
 
 describe("isotropy-ast-analyzer-db", () => {
   function run([description, dir, opts]) {
@@ -45,41 +17,51 @@ describe("isotropy-ast-analyzer-db", () => {
         dir,
         `fixture.js`
       );
-      const outputPath = path.resolve(__dirname, "fixtures", dir, `output.js`);
-      const expected = require(`./fixtures/${dir}/expected`);
+
       const pluginInfo = makePlugin(opts);
 
-      const babelResult = babel.transformFileSync(fixturePath, {
-        plugins: [
-          [
-            pluginInfo.plugin,
-            {
-              projects: [
-                {
-                  dir: "dist/test",
-                  modules: [
-                    {
-                      source: "fixtures/my-db",
-                      locations: [
-                        { name: "todos", connStr: "redis://127.0.0.1:6379" }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
+      const callWrapper = () => {
+        babel.transformFileSync(fixturePath, {
+          plugins: [
+            [
+              pluginInfo.plugin,
+              {
+                projects: [
+                  {
+                    dir: "dist/test",
+                    modules: [
+                      {
+                        source: "fixtures/my-db",
+                        locations: [
+                          { name: "todos", connStr: "redis://127.0.0.1:6379" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "transform-object-rest-spread"
           ],
-          "transform-object-rest-spread"
-        ],
-        parserOpts: {
-          sourceType: "module",
-          allowImportExportEverywhere: true
-        },
-        babelrc: false
-      });
-      const result = pluginInfo.getResult();
-      const actual = clean(result.analysis);
-      actual.should.deepEqual(expected);
+          parserOpts: {
+            sourceType: "module",
+            allowImportExportEverywhere: true
+          },
+          babelrc: false
+        });
+        return pluginInfo.getResult();
+      };
+
+      return dir.includes("error")
+        ? should(() => callWrapper()).throw(
+            /Compilation failed. Not a valid isotropy operation./
+          )
+        : (() => {
+            const expected = require(`./fixtures/${dir}/expected`);
+            const result = callWrapper();
+            const actual = clean(result.analysis);
+            actual.should.deepEqual(expected);
+          })();
     });
   }
 
@@ -87,9 +69,12 @@ describe("isotropy-ast-analyzer-db", () => {
     ["collection", "collection"],
     ["get", "get"],
     ["put", "put"],
-    ["del", "del"]
+    ["del", "del"],
     // ["count", "count"],
     // ["update", "update"]
+    ["read-call-error", "read-call-error"],
+    ["read-member-error", "read-member-error"],
+    ["write-error", "write-error"]
   ];
 
   for (const test of tests) {
