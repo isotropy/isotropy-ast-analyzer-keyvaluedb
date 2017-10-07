@@ -1,10 +1,10 @@
 {
   "name": "isotropy-ast-analyzer-keyvaluedb",
   "version": "0.0.1",
-  "author": "Arivanandan<uarivanandan@gmail.com>",
+  "author": "Isotropy Team<isotropy@agilehead.com>",
   "contributors": [
-  "Jeswin Kumar<jeswinpk@agilehead.com>",
-  "Arivanandan<uarivanandan@gmail.com>"
+    "Arivanandan<uarivanandan@gmail.com>",
+    "Jeswin Kumar<jeswinpk@agilehead.com>"
   ],
   "scripts": {
     "test": "mocha dist/test/test.js",
@@ -12,7 +12,6 @@
   },
   "main": "dist/index.js",
   "dependencies": {
-    "ast-crumbs": "0.0.2",
     "chimpanzee": "0.0.50",
     "lazily": "^0.0.17",
     "ramda": "^0.23.0"
