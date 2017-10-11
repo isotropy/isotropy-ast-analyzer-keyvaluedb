@@ -31,8 +31,8 @@ describe("isotropy-ast-analyzer-db", () => {
                     dir: "dist/test",
                     modules: [
                       {
-                        source: "fixtures/my-db",
-                        locations: [
+                        source: "dist/test/fixtures/my-db",
+                        databases: [
                           { name: "todos", connStr: "redis://127.0.0.1:6379" }
                         ]
                       }
