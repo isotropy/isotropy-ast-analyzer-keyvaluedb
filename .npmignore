@@ -2,3 +2,4 @@ src/*
 dist/test/*
 build.sh
 .gitignore
+.vscode

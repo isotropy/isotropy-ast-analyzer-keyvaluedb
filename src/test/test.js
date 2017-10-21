@@ -32,9 +32,9 @@ describe("isotropy-ast-analyzer-db", () => {
                     modules: [
                       {
                         source: "dist/test/fixtures/my-db",
-                        databases: [
-                          { name: "todos", connStr: "redis://127.0.0.1:6379" }
-                        ]
+                        databases: {
+                          todos: { connection: "redis://127.0.0.1:6379" }
+                        }
                       }
                     ]
                   }
@@ -66,15 +66,9 @@ describe("isotropy-ast-analyzer-db", () => {
   }
 
   const tests = [
-    ["collection", "collection"],
     ["get", "get"],
-    ["put", "put"],
-    ["del", "del"],
-    // ["count", "count"],
-    // ["update", "update"]
-    ["read-call-error", "read-call-error"],
-    ["read-member-error", "read-member-error"],
-    ["write-error", "write-error"]
+    // ["put", "put"],
+    // ["del", "del"],
   ];
 
   for (const test of tests) {
