@@ -4,6 +4,6 @@ module.exports = {
   operation: "get",
   key: {
     type: "StringLiteral",
-    value: "Get_Eggs"
+    value: "First_Task"
   }
 };

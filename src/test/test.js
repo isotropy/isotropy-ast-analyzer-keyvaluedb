@@ -4,11 +4,14 @@ import fs from "fs";
 import path from "path";
 import makePlugin from "./plugin";
 import sourceMapSupport from "source-map-support";
-import clean from "../chimpanzee-utils/node-cleaner";
+import * as utils from "isotropy-plugin-dev-utils";
+
 
 sourceMapSupport.install();
 
 describe("isotropy-ast-analyzer-db", () => {
+  console.log(utils)
+  debugger;
   function run([description, dir, opts]) {
     it(`${description}`, () => {
       const fixturePath = path.resolve(
@@ -59,7 +62,7 @@ describe("isotropy-ast-analyzer-db", () => {
         : (() => {
             const expected = require(`./fixtures/${dir}/expected`);
             const result = callWrapper();
-            const actual = clean(result.analysis);
+            const actual = utils.astCleaner.clean(result.analysis);
             actual.should.deepEqual(expected);
           })();
     });
@@ -67,8 +70,8 @@ describe("isotropy-ast-analyzer-db", () => {
 
   const tests = [
     ["get", "get"],
-    // ["put", "put"],
-    // ["del", "del"],
+    ["put", "put"],
+    ["del", "del"],
   ];
 
   for (const test of tests) {

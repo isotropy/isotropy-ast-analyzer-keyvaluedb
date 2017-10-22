@@ -1,29 +1,35 @@
-import { source } from "../chimpanzee-utils";
+import {
+  Skip,
+  Match,
+  Error,
+  capture,
+  wrap,
+  parse,
+  builtins as $
+} from "chimpanzee";
 import { collection } from "./";
-import { capture, Match, Skip } from "chimpanzee";
-import composite from "../chimpanzee-utils/composite";
-import R from "ramda";
+import { arrowFunctions, composite, source } from "isotropy-analyzer-utils";
 
-const unaryExp = {
-  type: "UnaryExpression",
-  operator: "!",
-  argument: {
+const binaryExpression = composite(
+  {
     type: "BinaryExpression",
-    left: {
-      type: "MemberExpression",
-      object: {
-        type: "Identifier",
-        name: capture("dataAccessor2")
-      },
-      property: {
-        type: "Identifier",
-        name: "key"
-      }
-    },
+    left: wrap(
+      obj => () =>
+        arrowFunctions.isMemberExpressionDefinedOnParameter(obj)
+          ? new Match(obj)
+          : new Error(
+              `Expression must be defined on the arrow function parameter.`
+            ),
+      { selector: "path" }
+    ),
     operator: "===",
     right: capture("key")
+  },
+  {
+    build: obj => () => result => result.value.key,
+    selector: "path"
   }
-};
+);
 
 export default function(state, analysisState) {
   return composite(
@@ -44,32 +50,23 @@ export default function(state, analysisState) {
         arguments: [
           {
             type: "ArrowFunctionExpression",
-            params: [
-              {
-                type: "Identifier",
-                name: capture("dataAccessor1")
-              }
-            ],
-            body: unaryExp
+            body: {
+              type: "UnaryExpression",
+              operator: "!",
+              argument: binaryExpression
+            }
           }
         ]
       }
     },
     {
-      build: obj => context => result =>
+      build: () => () => result =>
         result instanceof Match
-          ? (() => {
-              const data = result.value.arguments[0];
-              return R.equals(result.value.left, result.value.object)
-                ? R.equals(data.params[0].dataAccessor1, data.dataAccessor2)
-                  ? del(result.value.left, {
-                      keyNode: result.value.arguments[0].key
-                    })
-                  : new Skip(`Incorrect access variable.`)
-                : new Skip(
-                    `The result of the concat() must be assigned to the same collection.`
-                  );
-            })()
+          ? {
+              ...result.value.object,
+              operation: "del",
+              key: result.value.arguments[0].argument
+            }
           : result
     }
   );

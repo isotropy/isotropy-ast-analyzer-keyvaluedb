@@ -1,5 +1,5 @@
 import myDb from "../my-db";
 
 async function deleteTodos(assignee) {
-  myDb.todos = myDb.todos.filter(todo => !(todo.key === "Get_Eggs"));
+  myDb.todos = myDb.todos.filter(todo => !(todo.key === "First_Task"));
 }

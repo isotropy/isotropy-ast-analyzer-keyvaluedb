@@ -1,6 +1,6 @@
 {
   "name": "isotropy-ast-analyzer-keyvaluedb",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Isotropy Team<isotropy@agilehead.com>",
   "contributors": [
     "Arivanandan<uarivanandan@gmail.com>",
@@ -26,6 +26,7 @@
     "babel-preset-latest": "^6.22.0",
     "babel-preset-modern-browsers": "^7.0.0",
     "babel-preset-stage-2": "^6.22.0",
+    "isotropy-plugin-dev-utils": "^0.0.6",
     "mocha": "*",
     "should": "*",
     "source-map-support": "^0.4.8"

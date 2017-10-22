@@ -1,6 +1,6 @@
 import { capture, wrap, Match, Skip } from "chimpanzee";
 import { root } from "./";
-import composite from "../chimpanzee-utils/composite";
+import { composite } from "isotropy-analyzer-utils";
 
 export default function(state, analysisState) {
   return composite(

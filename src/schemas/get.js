@@ -7,9 +7,8 @@ import {
   parse,
   builtins as $
 } from "chimpanzee";
-import { source } from "../chimpanzee-utils";
 import { collection } from "./";
-import { arrowFunctions, composite } from "isotropy-analyzer-utils";
+import { source, arrowFunctions, composite } from "isotropy-analyzer-utils";
 
 const binaryExpression = composite(
   {
@@ -56,8 +55,8 @@ export default function(state, analysisState) {
         result instanceof Match
           ? {
               ...result.value.object,
-              key: result.value.arguments[0].body,
-              operation: "get"
+              operation: "get",
+              key: result.value.arguments[0].body
             }
           : result
     }
