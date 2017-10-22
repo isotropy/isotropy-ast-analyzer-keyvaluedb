@@ -3,7 +3,6 @@ import { collection } from "./";
 import { capture, Match, Skip } from "chimpanzee";
 import composite from "../chimpanzee-utils/composite";
 import R from "ramda";
-import { del } from "../db-statements";
 
 const unaryExp = {
   type: "UnaryExpression",

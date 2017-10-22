@@ -1,25 +1,36 @@
-import { Skip, Match, capture, builtins as $ } from "chimpanzee";
+import {
+  Skip,
+  Match,
+  Error,
+  capture,
+  wrap,
+  parse,
+  builtins as $
+} from "chimpanzee";
 import { source } from "../chimpanzee-utils";
 import { collection } from "./";
-import { get } from "../db-statements";
-import composite from "../chimpanzee-utils/composite";
+import { arrowFunctions, composite } from "isotropy-analyzer-utils";
 
-const binaryExp = {
-  type: "BinaryExpression",
-  left: {
-    type: "MemberExpression",
-    object: {
-      type: "Identifier",
-      name: capture("dataAccessor2")
-    },
-    property: {
-      type: "Identifier",
-      name: "key"
-    }
+const binaryExpression = composite(
+  {
+    type: "BinaryExpression",
+    left: wrap(
+      obj => () =>
+        arrowFunctions.isMemberExpressionDefinedOnParameter(obj)
+          ? new Match(obj)
+          : new Error(
+              `Expression must be defined on the arrow function parameter.`
+            ),
+      { selector: "path" }
+    ),
+    operator: "===",
+    right: capture("key")
   },
-  operator: "===",
-  right: capture("key")
-};
+  {
+    build: obj => () => result => result.value.key,
+    selector: "path"
+  }
+);
 
 export default function(state, analysisState) {
   return composite(
@@ -36,26 +47,19 @@ export default function(state, analysisState) {
       arguments: [
         {
           type: "ArrowFunctionExpression",
-          params: [
-            {
-              type: "Identifier",
-              name: capture("dataAccessor1")
-            }
-          ],
-          body: binaryExp
+          body: binaryExpression
         }
       ]
     },
     {
       build: () => () => result =>
         result instanceof Match
-          ? (() => {
-              const data = result.value.arguments[0];
-              return data.params[0].dataAccessor1 === data.dataAccessor2
-                ? get(result.value.object, { keyNode: data.key })
-                : new Skip(`The data access variables do not match`);
-            })()
-          : new Skip(`Not get`)
+          ? {
+              ...result.value.object,
+              key: result.value.arguments[0].body,
+              operation: "get"
+            }
+          : result
     }
   );
 }

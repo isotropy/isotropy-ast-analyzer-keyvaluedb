@@ -7,12 +7,14 @@
     "Jeswin Kumar<jeswinpk@agilehead.com>"
   ],
   "scripts": {
+    "build": "./build.sh",
     "test": "mocha dist/test/test.js",
     "debug": "mocha dist/test/test.js --debug-brk"
   },
   "main": "dist/index.js",
   "dependencies": {
-    "chimpanzee": "^0.0.57",
+    "chimpanzee": "^0.0.60",
+    "isotropy-analyzer-utils": "^0.0.1",
     "lazily": "^0.0.17",
     "ramda": "^0.23.0"
   },

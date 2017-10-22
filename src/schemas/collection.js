@@ -1,5 +1,4 @@
 import { capture, wrap, Match, Skip } from "chimpanzee";
-import { createCollection } from "../db-statements";
 import { root } from "./";
 import composite from "../chimpanzee-utils/composite";
 
@@ -20,13 +19,12 @@ export default function(state, analysisState) {
       build: obj => context => result => {
         return result instanceof Match
           ? (() => {
-              const db = result.value.root.databases[result.value.collection];
-              return db
-                ? createCollection({
+              const database = result.value.root.databases[result.value.collection];
+              return database
+                ? {
                     identifier: result.value.root.identifier,
-                    database: result.value.root.database,
-                    collection: result.value.collection
-                  })
+                    database,
+                  }
                 : new Error(
                     `Could not find configuration for key value database ${result
                       .value.collection}.`
