@@ -5,9 +5,10 @@ export default function(opts) {
 
   function analyze(fn, path, state) {
     const analysis = fn(path, state);
+    debugger;
     path.skip();
     if (analysis !== undefined) {
-      _analysis = analysis.value;
+      _analysis = analysis;
     }
   }
 
@@ -21,17 +22,13 @@ export default function(opts) {
       visitor: {
         ImportDeclaration(path, state) {
           analyze(analyzers.meta.analyzeImportDeclaration, path, state);
-          path.skip;
+          path.skip();
         },
 
         AssignmentExpression(path, state) {
           analyze(analyzers.write.analyzeAssignmentExpression, path, state);
         },
-
-        MemberExpression(path, state) {
-          analyze(analyzers.read.analyzeMemberExpression, path, state);
-        },
-
+        
         CallExpression(path, state) {
           analyze(analyzers.read.analyzeCallExpression, path, state);
         }

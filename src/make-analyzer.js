@@ -6,6 +6,6 @@ export default function makeAnalyzer(schemas, path, state, analysisState) {
     Seq.of(schemas)
       .map(schema => schema(state, analysisState))
       .map(schema => match(schema, path))
-      .first(x => x instanceof Match)
+      .first((x, i) => x instanceof Match || i === (schemas.length - 1))
   );
 }
