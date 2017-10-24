@@ -11,11 +11,7 @@ import {
 } from "chimpanzee";
 import { collection } from "./";
 import { source, arrowFunctions, composite } from "isotropy-analyzer-utils";
-
-function canParse(schema, obj) {
-  const result = parse(schema)(obj)();
-  return result instanceof Match || result instanceof Empty;
-}
+import { canParse } from "isotropy-analyzer-errors";
 
 const binaryExpression = composite(
   {
@@ -67,7 +63,8 @@ export default function(state, analysisState) {
             key: result.value.arguments[0].body
           }
         : result instanceof Skip &&
-          canParse(schema.callee.object, obj.get("callee").get("object"))
+          canParse(schema.callee.object, obj.get("callee.object")) &&
+          obj.node.callee.property.name === "find"
           ? new Fault(
               `Invalid database expression. Should look like: myDb.todos.find(todo => todo.key === "some_key")`
             )

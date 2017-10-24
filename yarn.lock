@@ -738,6 +738,13 @@ is-finite@^1.0.0:
   dependencies:
     number-is-nan "^1.0.0"
 
+isotropy-analyzer-errors@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/isotropy-analyzer-errors/-/isotropy-analyzer-errors-0.0.5.tgz#544feb186e2d1814b63ef53ccb6600a6f6bc0676"
+  dependencies:
+    chimpanzee "^0.0.61"
+    isotropy-analyzer-utils "^0.0.1"
+
 isotropy-analyzer-utils@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/isotropy-analyzer-utils/-/isotropy-analyzer-utils-0.0.1.tgz#993efbcc5e257641f233581ff06273f65ffdaa93"

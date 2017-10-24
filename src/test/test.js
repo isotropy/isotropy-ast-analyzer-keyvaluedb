@@ -80,6 +80,8 @@ describe("isotropy-ast-analyzer-db", () => {
     ["put-error", "put-error", "fault"],
     ["del", "del", "match"],
     ["del-error", "del-error", "fault"],
+    ["non-specific-write-error", "non-specific-write-error", "fault"],
+    ["non-specific-read-error", "non-specific-read-error", "fault"]
   ];
 
   for (const test of tests) {

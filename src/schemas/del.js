@@ -9,11 +9,7 @@ import {
 } from "chimpanzee";
 import { collection } from "./";
 import { arrowFunctions, composite, source } from "isotropy-analyzer-utils";
-
-function canParse(schema, obj) {
-  const result = parse(schema)(obj)();
-  return result instanceof Match || result instanceof Empty;
-}
+import { canParse } from "isotropy-analyzer-errors";
 
 const binaryExpression = composite(
   {
