@@ -67,7 +67,14 @@ export default function(state, analysisState) {
               operation: "del",
               key: result.value.arguments[0].argument
             }
-          : result
+          : canParse(
+              schema.right.callee.object,
+              obj.get("right.callee.object")
+            ) && obj.node.right.callee.property.name === "filter"
+            ? new Fault(
+                `Invalid database expression. Should look like: myDb.todos = myDb.todos.filter(todo => !(todo.key === "Task"))`
+              )
+            : result
     }
   );
 }

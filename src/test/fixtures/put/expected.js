@@ -10,7 +10,7 @@ module.exports = {
           type: "ObjectProperty",
           method: false,
           key: { type: "Identifier", name: "key" },
-          value: { type: "StringLiteral", value: "First_Task" }
+          value: { type: "StringLiteral", value: "Task" }
         },
         {
           type: "ObjectProperty",

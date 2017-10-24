@@ -35,7 +35,7 @@ export default function(state, analysisState) {
           }
         : canParse(schema.right.callee.object, obj.get("right.callee.object")) && obj.node.right.callee.property.name === "concat"
           ? new Fault(
-              `Invalid database expression. Should look like: myDb.todos = myDb.todos.concat({ key: "First_Task", value: "Get Eggs" })`
+              `Invalid database expression. Should look like: myDb.todos = myDb.todos.concat({ key: "Task", value: "Get Eggs" })`
             )
           : result
     }
