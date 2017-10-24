@@ -67,7 +67,6 @@ describe("isotropy-ast-analyzer-db", () => {
         actual.should.be.an.instanceOf(Skip);
         actual.message.should.equal(expected.message);
       } else if (resultType === "fault") {
-        debugger;
         actual.should.be.an.instanceOf(Fault);
         actual.message.should.equal(expected.message);
       }
