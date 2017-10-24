@@ -5,7 +5,6 @@ export default function(opts) {
 
   function analyze(fn, path, state) {
     const analysis = fn(path, state);
-    debugger;
     path.skip();
     if (analysis !== undefined) {
       _analysis = analysis;

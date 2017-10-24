@@ -69,7 +69,7 @@ export default function(state, analysisState) {
         : result instanceof Skip &&
           canParse(schema.callee.object, obj.get("callee").get("object"))
           ? new Fault(
-              `Invalid database expression. Should look like myDb.todos.find(todo => todo.key === "some_key")`
+              `Invalid database expression. Should look like: myDb.todos.find(todo => todo.key === "some_key")`
             )
           : result
   });
