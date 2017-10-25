@@ -19,14 +19,15 @@ export default function(state, analysisState) {
       build: obj => context => result => {
         return result instanceof Match
           ? (() => {
-              const database = result.value.root.databases[result.value.collection];
+              const database =
+                result.value.root.databases[result.value.collection];
               return database
                 ? {
                     identifier: result.value.root.identifier,
-                    database,
+                    database
                   }
                 : new Error(
-                    `Could not find configuration for key value database ${result
+                    `Could not find isotropy plugin configuration for KeyValueDB ${result
                       .value.collection}.`
                   );
             })()
