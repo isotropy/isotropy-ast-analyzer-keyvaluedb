@@ -26,7 +26,7 @@ export default function(state, analysisState) {
                     identifier: result.value.root.identifier,
                     database
                   }
-                : new Error(
+                : new Fault(
                     `Could not find isotropy plugin configuration for KeyValueDB ${result
                       .value.collection}.`
                   );

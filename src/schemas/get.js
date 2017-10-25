@@ -20,7 +20,7 @@ const binaryExpression = composite(
       obj => () =>
         arrowFunctions.isMemberExpressionDefinedOnParameter(obj)
           ? new Match(obj)
-          : new Error(
+          : new Fault(
               `Expression must be defined on the arrow function parameter.`
             ),
       { selector: "path" }
