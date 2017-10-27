@@ -3,36 +3,48 @@ import {
   Match,
   Empty,
   Fault,
-  Error,
   capture,
   wrap,
   parse,
+  any,
   builtins as $
 } from "chimpanzee";
 import { collection } from "./";
-import { source, arrowFunctions, composite } from "isotropy-analyzer-utils";
+import {
+  source,
+  arrowFunctions,
+  composite,
+  permute
+} from "isotropy-analyzer-utils";
 import { canParse } from "isotropy-analyzer-errors";
 
-const binaryExpression = composite(
-  {
-    type: "BinaryExpression",
-    left: wrap(
+const binaryExpression = any(
+  permute([
+    wrap(
       obj => () =>
         arrowFunctions.isMemberExpressionDefinedOnParameter(obj)
           ? new Match(obj)
-          : new Fault(
+          : new Skip(
               `Expression must be defined on the arrow function parameter.`
             ),
       { selector: "path" }
     ),
-    operator: "===",
-    right: capture("key")
-  },
-  {
-    build: obj => () => result =>
-      result instanceof Match ? result.value.key : result,
-    selector: "path"
-  }
+    capture("key")
+  ]).map(([left, right]) =>
+    composite(
+      {
+        type: "BinaryExpression",
+        left,
+        operator: "===",
+        right
+      },
+      {
+        build: obj => () => result =>
+          result instanceof Match ? result.value.key : result
+      }
+    )
+  ),
+  { selector: "path" }
 );
 
 export default function(state, analysisState) {

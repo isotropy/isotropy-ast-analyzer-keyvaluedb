@@ -75,6 +75,7 @@ describe("isotropy-ast-analyzer-db", () => {
 
   const tests = [
     ["get", "get", "match"],
+    ["get-ulta", "get-ulta", "match"],
     ["get-error", "get-error", "fault"],
     ["put", "put", "match"],
     ["put-error", "put-error", "fault"],

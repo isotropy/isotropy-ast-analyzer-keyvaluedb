@@ -1,6 +1,6 @@
 {
   "name": "isotropy-ast-analyzer-keyvaluedb",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Isotropy Team<isotropy@agilehead.com>",
   "contributors": [
     "Arivanandan<uarivanandan@gmail.com>",
@@ -15,7 +15,7 @@
   "dependencies": {
     "chimpanzee": "^0.0.61",
     "isotropy-analyzer-errors": "^0.0.5",
-    "isotropy-analyzer-utils": "^0.0.1",
+    "isotropy-analyzer-utils": "^0.0.2",
     "lazily": "^0.0.17",
     "ramda": "^0.23.0"
   },
