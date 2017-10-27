@@ -14,38 +14,10 @@ import {
   source,
   arrowFunctions,
   composite,
-  permute
+  permute,
+  permuteWith
 } from "isotropy-analyzer-utils";
 import { canParse } from "isotropy-analyzer-errors";
-
-const binaryExpression = any(
-  permute([
-    wrap(
-      obj => () =>
-        arrowFunctions.isMemberExpressionDefinedOnParameter(obj)
-          ? new Match(obj)
-          : new Skip(
-              `Expression must be defined on the arrow function parameter.`
-            ),
-      { selector: "path" }
-    ),
-    capture("key")
-  ]).map(([left, right]) =>
-    composite(
-      {
-        type: "BinaryExpression",
-        left,
-        operator: "===",
-        right
-      },
-      {
-        build: obj => () => result =>
-          result instanceof Match ? result.value.key : result
-      }
-    )
-  ),
-  { selector: "path" }
-);
 
 export default function(state, analysisState) {
   const schema = {
@@ -61,7 +33,34 @@ export default function(state, analysisState) {
     arguments: [
       {
         type: "ArrowFunctionExpression",
-        body: binaryExpression
+        body: any(
+          permuteWith(
+            [
+              [x => x.left, (x, v) => ({ ...x, left: v })],
+              [x => x.right, (x, v) => ({ ...x, right: v })]
+            ],
+            {
+              type: "BinaryExpression",
+              left: wrap(
+                obj => () =>
+                  arrowFunctions.isMemberExpressionDefinedOnParameter(obj)
+                    ? new Match(obj)
+                    : new Skip(
+                        `Expression must be defined on the arrow function parameter.`
+                      ),
+                { selector: "path" }
+              ),
+              operator: "===",
+              right: capture("key")
+            }
+          ).map(s =>
+            composite(s, {
+              build: obj => () => result =>
+                result instanceof Match ? result.value.key : result
+            })
+          ),
+          { selector: "path" }
+        )
       }
     ]
   };

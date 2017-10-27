@@ -15,7 +15,7 @@
   "dependencies": {
     "chimpanzee": "^0.0.61",
     "isotropy-analyzer-errors": "^0.0.5",
-    "isotropy-analyzer-utils": "^0.0.2",
+    "isotropy-analyzer-utils": "^0.0.3",
     "lazily": "^0.0.17",
     "ramda": "^0.23.0"
   },
