@@ -5,35 +5,18 @@ import {
   capture,
   wrap,
   parse,
+  any,
   builtins as $
 } from "chimpanzee";
+
 import { collection } from "./";
-import { arrowFunctions, composite, source } from "isotropy-analyzer-utils";
+
+import { source, composite, permuteProps } from "isotropy-analyzer-utils";
+
 import { canParse } from "isotropy-analyzer-errors";
 
-const binaryExpression = composite(
-  {
-    type: "BinaryExpression",
-    left: wrap(
-      obj => () =>
-        arrowFunctions.isMemberExpressionDefinedOnParameter(obj)
-          ? new Match(obj)
-          : new Fault(
-              `Expression must be defined on the arrow function parameter.`
-            ),
-      { selector: "path" }
-    ),
-    operator: "===",
-    right: capture("key")
-  },
-  {
-    build: obj => () => result => result.value.key,
-    selector: "path"
-  }
-);
-
 export default function(state, analysisState) {
-  const schema = {
+  return composite({
     type: "AssignmentExpression",
     operator: "=",
     left: source([collection])(state, analysisState),
@@ -46,34 +29,50 @@ export default function(state, analysisState) {
           type: "Identifier",
           name: "filter"
         }
-      },
-      arguments: [
-        {
-          type: "ArrowFunctionExpression",
-          body: {
-            type: "UnaryExpression",
-            operator: "!",
-            argument: binaryExpression
-          }
-        }
-      ]
+      }
     }
-  };
-  return composite(schema, {
-    build: obj => () => result =>
-      result instanceof Match
-        ? {
-            ...result.value.object,
-            operation: "del",
-            key: result.value.arguments[0].argument
-          }
-        : canParse(
-            schema.right.callee.object,
-            obj.get("right.callee.object")
-          ) && obj.node.right.callee.property.name === "filter"
-          ? new Fault(
-              `Invalid database expression. Should look like: myDb.todos = myDb.todos.filter(todo => !(todo.key === "Task"))`
-            )
-          : result
-  });
+  }).then(({ object: _object }) =>
+    composite(
+      {
+        right: {
+          arguments: [
+            wrap({
+              type: "ArrowFunctionExpression",
+              params: capture(),
+              body: {
+                type: "UnaryExpression",
+                operator: "!"
+              }
+            }).then(({ params }) => ({
+              body: {
+                argument: any(
+                  permuteProps(["left", "right"], {
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: { type: "Identifier", name: params[0].name }
+                    },
+                    operator: "===",
+                    right: capture("key")
+                  })
+                )
+              }
+            }))
+          ]
+        }
+      },
+      {
+        build: obj => () => result =>
+          result instanceof Match
+            ? {
+                ..._object,
+                operation: "del",
+                key: result.value.arguments[0].argument.key
+              }
+            : new Fault(
+                `Invalid database expression. Should look like: myDb.todos = myDb.todos.filter(todo => !(todo.key === "Task"))`
+              )
+      }
+    )
+  );
 }

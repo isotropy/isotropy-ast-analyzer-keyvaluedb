@@ -4,7 +4,7 @@ import { source, composite } from "isotropy-analyzer-utils";
 import { canParse } from "isotropy-analyzer-errors";
 
 export default function(state, analysisState) {
-  const schema = {
+  return composite({
     type: "AssignmentExpression",
     operator: "=",
     left: source([collection])(state, analysisState),
@@ -17,26 +17,27 @@ export default function(state, analysisState) {
           type: "Identifier",
           name: "concat"
         }
+      }
+    }
+  }).then(({ object: _object }) =>
+    composite(
+      {
+        right: {
+          arguments: [capture()]
+        }
       },
-      arguments: [capture()]
-    }
-  };
-  return composite(schema, {
-    build: obj => context => result => {
-      return result instanceof Match
-        ? {
-            ...result.value.object,
-            operation: "put",
-            items: result.value.arguments
-          }
-        : canParse(
-            schema.right.callee.object,
-            obj.get("right.callee.object")
-          ) && obj.node.right.callee.property.name === "concat"
-          ? new Fault(
-              `Invalid database expression. Should look like: myDb.todos = myDb.todos.concat({ key: "Task", value: "Get Eggs" })`
-            )
-          : result;
-    }
-  });
+      {
+        build: obj => context => result =>
+          result instanceof Match
+            ? {
+                ..._object,
+                operation: "put",
+                items: result.value.arguments
+              }
+            : new Fault(
+                `Invalid database expression. Should look like: myDb.todos = myDb.todos.concat({ key: "Task", value: "Get Eggs" })`
+              )
+      }
+    )
+  );
 }
