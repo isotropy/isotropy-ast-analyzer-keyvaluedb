@@ -9,12 +9,8 @@ import {
   permuteObject,
   builtins as $
 } from "chimpanzee";
-
 import { collection } from "./";
-
 import { source, composite } from "isotropy-analyzer-utils";
-
-import { canParse } from "isotropy-analyzer-errors";
 
 export default function(state, analysisState) {
   return composite({
