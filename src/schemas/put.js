@@ -1,7 +1,6 @@
 import { collection } from "./";
 import { capture, Match, Skip, Fault, parse } from "chimpanzee";
 import { source, composite } from "isotropy-analyzer-utils";
-import { canParse } from "isotropy-analyzer-errors";
 
 export default function(state, analysisState) {
   return composite({

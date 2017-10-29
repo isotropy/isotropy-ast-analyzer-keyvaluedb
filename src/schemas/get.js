@@ -7,14 +7,13 @@ import {
   wrap,
   parse,
   any,
+  permuteObject,
   builtins as $
 } from "chimpanzee";
 
 import { collection } from "./";
 
-import { source, composite, permuteProps } from "isotropy-analyzer-utils";
-
-import { canParse } from "isotropy-analyzer-errors";
+import { source, composite } from "isotropy-analyzer-utils";
 
 export default function(state, analysisState) {
   return composite({
@@ -36,7 +35,7 @@ export default function(state, analysisState) {
             params: capture()
           }).then(({ params }) => ({
             body: any(
-              permuteProps(["left", "right"], {
+              permuteObject(["left", "right"], {
                 type: "BinaryExpression",
                 left: {
                   type: "MemberExpression",
