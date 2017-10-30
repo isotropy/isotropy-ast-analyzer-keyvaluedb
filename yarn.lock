@@ -738,9 +738,9 @@ is-finite@^1.0.0:
   dependencies:
     number-is-nan "^1.0.0"
 
-isotropy-analyzer-errors@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/isotropy-analyzer-errors/-/isotropy-analyzer-errors-0.0.6.tgz#ab1f7a70ad3afd13176958dd8feae412a2cce998"
+isotropy-analyzer-errors@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/isotropy-analyzer-errors/-/isotropy-analyzer-errors-0.0.7.tgz#8e289a73694f8805df9a00905dab02d191044084"
 
 isotropy-analyzer-utils@^0.0.14:
   version "0.0.14"

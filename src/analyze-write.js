@@ -6,7 +6,14 @@ export default function(analysisState) {
   return {
     analyzeAssignmentExpression(path, state) {
       return makeAnalyzer(
-        [schemas.put, schemas.del, errorSchemas.writeErrorSchema(schemas.root)],
+        [
+          schemas.put,
+          schemas.del,
+          errorSchemas.writeErrorSchema(
+            schemas.root,
+            "Unable to parse KeyValueDB write expression. Refer to documentation."
+          )
+        ],
         path,
         state,
         analysisState
