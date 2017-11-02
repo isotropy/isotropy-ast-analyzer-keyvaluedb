@@ -613,9 +613,9 @@ chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chimpanzee@^0.0.64:
-  version "0.0.64"
-  resolved "https://registry.yarnpkg.com/chimpanzee/-/chimpanzee-0.0.64.tgz#1337e335b8401e4ad099d5586221957ffbed7fa2"
+chimpanzee@^0.0.65:
+  version "0.0.65"
+  resolved "https://registry.yarnpkg.com/chimpanzee/-/chimpanzee-0.0.65.tgz#e38d2e0d8484873b984905903218aa7a842f1d75"
   dependencies:
     lazily "0.0.17"
 
